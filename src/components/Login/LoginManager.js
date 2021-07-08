@@ -1,4 +1,3 @@
-import React from 'react';
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from './firebase.config';
@@ -23,6 +22,7 @@ export const handleGoogleSignIn = () => {
                 email:email,
                 photo: photoURL
             }
+            storeAuthToken();
             return signedInUser;
 
         }).catch((error) => {
@@ -31,4 +31,13 @@ export const handleGoogleSignIn = () => {
             var email = error.email;
             var credential = error.credential;
         });
+}
+
+const storeAuthToken = () =>{
+    firebase.auth().currentUser.getIdToken(true)
+    .then(function (idToken) {
+        sessionStorage.setItem('token',idToken);
+    }).catch(function (error) {
+        console.log(error)
+    });
 }
